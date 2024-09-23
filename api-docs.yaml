@@ -1,0 +1,184 @@
+openapi: 3.0.1
+info:
+  title: Reward Application
+  description: Reward Application
+  termsOfService: Terms of service
+  contact:
+    name: Chandan Prasad
+    url: https://www.test.com
+    email: chandankumarprasad1@gmail.com
+  license:
+    name: License of API
+    url: https://www.test.com/api-license
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/rewards/customer/{id}:
+    get:
+      tags:
+      - rewards-controller
+      operationId: getCustomerById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Customer"
+    put:
+      tags:
+      - rewards-controller
+      operationId: updateCustomer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+      - rewards-controller
+      operationId: deleteCustomer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/rewards/purchase:
+    post:
+      tags:
+      - rewards-controller
+      operationId: addPurchase
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Purchase"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/rewards/customer:
+    post:
+      tags:
+      - rewards-controller
+      operationId: addCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/rewards/points:
+    get:
+      tags:
+      - rewards-controller
+      operationId: getTotalPoints
+      parameters:
+      - name: customerId
+        in: query
+        description: Customer ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+  /api/rewards/customers:
+    get:
+      tags:
+      - rewards-controller
+      operationId: getAllCustomers
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+components:
+  schemas:
+    Customer:
+      required:
+      - email
+      - name
+      - phoneNumber
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          maxLength: 2147483647
+          minLength: 2
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          pattern: "^\\d{10}$"
+          type: string
+      description: Customer details
+    Purchase:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+        amount:
+          type: number
+          format: double
+      description: Purchase details
